@@ -404,6 +404,7 @@ int main() {
     {0, 1, 1}});
     std::cout << c.getParityCheckMatrix() <<"\n"<< std::endl;
     std::cout << c.getCodeWords() <<"\n"<< std::endl;
+    // todo(SJ) 陪集和陪集首部计算不正确
     std::cout << c.getCosetLeaders() <<"\n"<< std::endl;
     for (const auto& v : c.getCosetTable()) {
         for (int i = 0; i < v.getRowNum(); i++) {
