@@ -28,14 +28,8 @@
  * @date 2023-11-09
  * @version 0.1.0
  * @brief 陪集首部计算器
- * @todo 挖坑， 1.完成自动计算陪集首部
- * 2.完成根据奇偶校验矩阵初始化
- * 3.自动encode-decode
 */
-#include<assert.h>
 #include<concepts>
-#include<bitset>
-#include<array>
 #include<vector>
 #include<iostream>
 #include<stdexcept>
@@ -196,7 +190,7 @@ class Matrix {
             throw std::out_of_range(_DINFO "index out of range in Matrix,"
             "index = " + std::to_string(i) + " size = " + std::to_string(M));
         }
-        return data[i];
+        return data[i];  /// @attention 此处改为return *this[i] 可以吧?!!
     }
     /**
      * @brief 返回 m*n 的单位阵
@@ -289,17 +283,19 @@ class CosetLeader {
                 cosetLeaders[rowTail][i] = leader[i].val;
             for (int i = 0; i < (1 << M); i++) {
                 auto cw = Mat2({codeWords[i]});
+
                 std::vector<Z2> vec;
                 for (const auto& v : leader)vec.push_back(v.val);
                 auto led = Mat2({vec});
+
                 led = led + cw;
                 vis[word2num(led[0])] = 1;
                 cosetTable[rowTail][i] = led[0];
             }
             rowTail++;
         };
-
-        for (int cnt = 0; cnt <= N && rowTail != (1 << R); ++cnt) {  // 枚举1的个数
+        // 枚举1的个数
+        for (int cnt = 0; cnt <= N && rowTail != (1 << R); ++cnt) {
             std::vector<_B> leader(N);
             for (int i = 0; i < N; ++i) {
                 leader[i].index = i;
