@@ -292,8 +292,9 @@ class CosetLeader {
                 std::vector<Z2> vec;
                 for (const auto& v : leader)vec.push_back(v.val);
                 auto led = Mat2({vec});
-                vis[word2num((led + cw)[0])] = 1;
-                cosetTable[rowTail][i] = cw[0];
+                led = led + cw;
+                vis[word2num(led[0])] = 1;
+                cosetTable[rowTail][i] = led[0];
             }
             rowTail++;
         };
@@ -302,7 +303,7 @@ class CosetLeader {
             std::vector<_B> leader(N);
             for (int i = 0; i < N; ++i) {
                 leader[i].index = i;
-                if (i < cnt)leader[i].val = 0;
+                if (i < cnt)leader[i].val = 1;
             }
             do {
                 if (!vis.count(word2num(leader))) {
@@ -356,6 +357,11 @@ class CosetLeader {
                 return res;
             }
         }
+        throw std::logic_error("never to there in logical");
+        return Mat2{0, 0};
+    }
+    Mat2 decode(std::string codeword) {
+        return decode(str2word(codeword));
     }
     // 将num转化为2进制的1*length的矩阵
     inline static Mat2 num2word(unsigned int num, const size_t length) {
@@ -363,6 +369,31 @@ class CosetLeader {
         for (int i = 0; i < length && num; ++i) {
             res[0][length-i-1] = num&1;
             num >>= 1;
+        }
+        return res;
+    }
+    void printCosetTable() {
+        for (const auto& v : getCosetTable()) {
+            for (int i = 0; i < v.getRowNum(); i++) {
+                for (const auto val : v[i]) {
+                    std::cout << val;
+                }
+                std::cout << " ";
+            }
+            std::cout << std::endl;
+        }
+    }
+    /**
+     * @brief 将字符串形式的转化为Mat2(1*str.size())
+     * 方便使用
+     *
+     * @param wordstr
+     * @return Mat2
+     */
+    inline static Mat2 str2word(std::string wordStr) {
+        Mat2 res(1, wordStr.size());
+        for (int i = 0; i < wordStr.size(); ++i) {
+            res[0][i] = wordStr[i]-'0';
         }
         return res;
     }
@@ -402,16 +433,14 @@ int main() {
     {1, 0, 0},
     {1, 1, 0},
     {0, 1, 1}});
-    std::cout << c.getParityCheckMatrix() <<"\n"<< std::endl;
-    std::cout << c.getCodeWords() <<"\n"<< std::endl;
-    // todo(SJ) 陪集和陪集首部计算不正确
-    std::cout << c.getCosetLeaders() <<"\n"<< std::endl;
-    for (const auto& v : c.getCosetTable()) {
-        for (int i = 0; i < v.getRowNum(); i++) {
-            std::cout << CosetLeader::Mat2({v[i]}) << " ";
-        }
-        std::cout << std::endl;
-    }
-    std::cout << std::endl;
+    // std::cout << c.getParityCheckMatrix() <<"\n"<< std::endl;
+    // std::cout << c.getCodeWords() <<"\n"<< std::endl;
+    // std::cout << c.getCosetLeaders() <<"\n"<< std::endl;
+    // c.printCosetTable();
+    // std::cout << std::endl;
+    std::cout << c.decode("111011") << std::endl;
+    std::cout << c.decode("010000") << std::endl;
+    std::cout << c.decode("010100") << std::endl;
+    std::cout << c.decode("110000") << std::endl;
     return 0;
 }
