@@ -32,4 +32,5 @@ GetSelectedPath()
     }
     ; 启动 VS Code
     Run, %ComSpec% /C code "%selectedPath%", , Hide
+    Return
 }
