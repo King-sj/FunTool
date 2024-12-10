@@ -27,7 +27,7 @@ GetSelectedPath()
     selectedPath := GetSelectedPath()
     if (selectedPath = "")
     {
-        MsgBox "未选中文件或文件夹，或无法获取有效路径。"
+        MsgBox "No file or folder selected, or unable to obtain a valid path."
         return
     }
     ; 启动 VS Code
